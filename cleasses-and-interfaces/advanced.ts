@@ -44,10 +44,15 @@ class Employee extends User {
 const farid = new Employee('Muhammad', 'Farid', 'Chief Technology Officer')
 farid.greet()
 Employee.greet()
-// console.log(farid.fullName)
 
-// const farid = new User()
-// farid.firstName = 'Muhammad'
-// farid.lastName = 'Farid'
-// console.log(farid.fullName)
-// User.greet()
+abstract class UIElement {
+  constructor(public identifier: string) {}
+
+  clone(targetLocation: string) {}
+}
+
+class Dialog extends UIElement {
+  constructor(public idenfier: string, public type: 'positive' | 'negative') {
+    super(idenfier)
+  }
+}
