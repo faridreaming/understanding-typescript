@@ -30,9 +30,14 @@ var User = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    User.greet = function () {
+        console.log('Hello, my name is User!');
+    };
+    User.classId = 1;
     return User;
 }());
-var farid = new User();
-farid.firstName = '';
-farid.lastName = 'Farid';
-console.log(farid.fullName);
+// const farid = new User()
+// farid.firstName = 'Muhammad'
+// farid.lastName = 'Farid'
+// console.log(farid.fullName)
+User.greet;
