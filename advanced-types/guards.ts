@@ -12,8 +12,12 @@ const dbSource: DBSource = {
 
 type Source = FileSource | DBSource
 
+function isFile(source: Source) {
+  return source.type === 'file'
+}
+
 function loadData(source: Source) {
-  if (source.type === 'file') {
+  if (isFile(source)) {
     console.log(source.path)
     return
   }
