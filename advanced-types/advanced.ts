@@ -2,6 +2,8 @@ type DataStore = {
   [prop: string]: number | boolean | string
 }
 
+type DataStore2 = Record<string, number | boolean | string>
+
 let store: DataStore = {}
 
 store.id = 1
