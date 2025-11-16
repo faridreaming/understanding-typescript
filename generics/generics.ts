@@ -44,3 +44,12 @@ const svelte: siImut = {
   name: 'Svelte',
   cutenessLevel: 999,
 }
+
+interface Role<T> {}
+
+class User<T> {
+  constructor(public id: T) {}
+}
+
+const farid = new User(1)
+farid.id
