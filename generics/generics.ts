@@ -21,8 +21,8 @@ let store: DataStore<string> = {
   biji: 'mewing',
 }
 
-function merge<T>(a: T, b: T) {
+function merge<T1, T2>(a: T1, b: T2) {
   return [a, b]
 }
 
-const ids = merge(1, 2)
+const ids = merge(1, 'mewing :v')
