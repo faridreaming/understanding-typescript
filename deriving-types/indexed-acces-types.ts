@@ -9,4 +9,10 @@ type AppUser = {
   }[]
 }
 
-type Permissions = AppUser['permissions']
+// type Permissions = AppUser['permissions']
+// type Permission = Permissions[number]
+
+type Permission = AppUser['permissions'][number]
+
+type Names = string[]
+type Name = Names[number]
