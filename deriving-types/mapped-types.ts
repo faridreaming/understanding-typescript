@@ -1,12 +1,12 @@
 type MathFunction = (a: number, b: number) => number
 
 type Operations = {
-  add: MathFunction
-  subtract: MathFunction
+  readonly add: MathFunction
+  readonly subtract: MathFunction
 }
 
 type Results<T> = {
-  [Key in keyof T]: number
+  -readonly [Key in keyof T]?: number
 }
 
 let mathOperations: Operations = {
@@ -22,3 +22,5 @@ let mathResults: Results<Operations> = {
   add: mathOperations.add(1, 2),
   subtract: mathOperations.subtract(5, 2),
 }
+
+mathResults.add = 3
