@@ -29,8 +29,19 @@ function autobind(
   }
 }
 
+function fieldLogger(target: undefined, ctx: ClassFieldDecoratorContext) {
+  console.log(target)
+  console.log(ctx)
+
+  return (initialValue: any) => {
+    console.log(initialValue)
+    return ''
+  }
+}
+
 @logger
 class Person {
+  @fieldLogger
   name = 'Farid'
 
   @autobind
@@ -41,3 +52,4 @@ class Person {
 
 const farid = new Person()
 farid.greet()
+// farid.name
