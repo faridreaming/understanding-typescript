@@ -109,3 +109,34 @@ class Product {
     this.#price * (1 + tax)
   }
 }
+
+function Autobind(
+  _target: any,
+  _methodName: string,
+  descriptor: PropertyDescriptor
+) {
+  const originalMethod = descriptor.value
+  const adjustedDescriptor: PropertyDescriptor = {
+    configurable: true,
+    enumerable: false,
+    get: function () {
+      const boundFn = originalMethod.bind(this)
+      return boundFn
+    },
+  }
+  return adjustedDescriptor
+}
+
+class Printer {
+  message = 'This works tho!!!'
+
+  @Autobind
+  showMessage() {
+    console.log(this.message)
+  }
+}
+
+const p = new Printer()
+
+const button = document.querySelector('button')!
+button.addEventListener('click', p.showMessage)
