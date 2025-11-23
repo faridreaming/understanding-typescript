@@ -32,3 +32,46 @@ class Person {
 const farid = new Person()
 
 console.log(farid)
+
+function Log(target: any, propertyName: string | Symbol) {
+  console.log('Property decorator!')
+  console.log(target)
+  console.log(propertyName)
+}
+
+class Product {
+  @Log
+  _title: string
+  #price: number
+
+  constructor(title: string, price: number) {
+    this._title = title
+    this.#price = price
+  }
+
+  set title(val: string) {
+    if (val.trim() !== '') {
+      this._title = val
+      return
+    }
+    throw new Error('Invalid title: Title should not be empty!')
+  }
+
+  set price(val: number) {
+    if (val > 0) {
+      this.#price = val
+      return
+    }
+    throw new Error('Invalid price: Price should be possitive!')
+  }
+
+  get title() {
+    return this._title
+  }
+
+  get price() {
+    return this.#price
+  }
+
+  calculatePriceWithTax = (tax: number) => this.#price * (1 + tax)
+}
