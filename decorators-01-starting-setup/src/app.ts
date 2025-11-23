@@ -8,13 +8,19 @@ function Logger(logString: string) {
 
 function WithTemplate(template: string, hookId: string) {
   console.log('This is WithTemplate decorator!')
-  return function (constructor: any) {
-    console.log('Rendering template')
-    const hookEl = document.getElementById(hookId)
-    const person = new constructor()
-    if (hookEl) {
-      hookEl.innerHTML = template
-      hookEl.querySelector('h1')!.textContent = person.name
+  return function <T extends { new (...args: any[]): { name: string } }>(
+    originalConstructor: T
+  ) {
+    return class extends originalConstructor {
+      constructor(..._args: any[]) {
+        super()
+        console.log('Rendering template')
+        const hookEl = document.getElementById(hookId)
+        if (hookEl) {
+          hookEl.innerHTML = template
+          hookEl.querySelector('h1')!.textContent = this.name
+        }
+      }
     }
   }
 }
@@ -30,7 +36,6 @@ class Person {
 }
 
 const farid = new Person()
-
 console.log(farid)
 
 function Log(target: any, propertyName: string | Symbol) {
