@@ -93,7 +93,7 @@ class Product {
       this.#price = val
       return
     }
-    throw new Error('Invalid price: Price should be possitive!')
+    throw new Error('Invalid price: Price should be positive!')
   }
 
   get title() {
@@ -140,3 +140,87 @@ const p = new Printer()
 
 const button = document.querySelector('button')!
 button.addEventListener('click', p.showMessage)
+
+interface ValidatorConfig {
+  [property: string]: {
+    [validatatableProp: string]: string[]
+  }
+}
+
+const registeredValidators: ValidatorConfig = {}
+
+function required(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: ['required'],
+  }
+}
+
+function positiveNumber(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: ['positive'],
+  }
+}
+
+function validate(obj: any) {
+  const objValidatorConfig = registeredValidators[obj.constructor.name]
+  if (!objValidatorConfig) {
+    return true
+  }
+  let isValid = true
+  for (const prop in objValidatorConfig) {
+    for (const validator of objValidatorConfig[prop]) {
+      switch (validator) {
+        case 'required':
+          isValid = isValid && !!obj[prop]
+          break
+        case 'positive':
+          isValid = isValid && obj[prop] > 0
+          break
+      }
+    }
+  }
+  return isValid
+}
+
+class Courese {
+  @required
+  title: string
+  @positiveNumber
+  price: number
+
+  constructor(t: string, p: number) {
+    this.title = t
+    this.price = p
+  }
+}
+
+interface FormEl {
+  title: string
+  price: string
+}
+
+const form = document.querySelector('form')!
+
+function getFormValues(form: HTMLFormElement): FormEl {
+  const data = new FormData(form)
+  return {
+    title: data.get('title') as string,
+    price: data.get('price') as string,
+  }
+}
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault()
+  const title = getFormValues(form).title
+  const price = +getFormValues(form).price
+
+  const createdCourse = new Courese(title, price)
+
+  if (!validate(createdCourse)) {
+    alert('Invalid input, please try again!')
+    return
+  }
+  console.log(createdCourse)
+})
