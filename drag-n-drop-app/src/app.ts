@@ -156,7 +156,38 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   abstract renderContent(): void
 }
 
-// ProjectList Clas
+// ProjectItem Class (child(ren))
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+  constructor(hostListId: string, private project: Project) {
+    super('single-project', hostListId, false, project.id)
+
+    this.configure()
+    this.renderContent()
+  }
+
+  renderContent() {
+    const titleElement = document.createElement('h2')
+    const numOfPeopleElement = document.createElement('h3')
+    const descriptionElement = document.createElement('p')
+
+    titleElement.textContent = this.project.title
+    numOfPeopleElement.textContent = this.peopleText
+    descriptionElement.textContent = this.project.description
+
+    this.element.appendChild(titleElement)
+    this.element.appendChild(numOfPeopleElement)
+    this.element.appendChild(descriptionElement)
+  }
+
+  get peopleText() {
+    const numOfPeople = this.project.people
+    return `${numOfPeople} ${numOfPeople > 1 ? 'people' : 'person'} assigned`
+  }
+
+  configure() {}
+}
+
+// ProjectList Class (parent)
 class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   assignedProjects: Project[]
 
@@ -194,9 +225,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     )! as HTMLUListElement
     listEl.innerHTML = ''
     for (const prjItem of this.assignedProjects) {
-      const listItem = document.createElement('li')
-      listItem.textContent = prjItem.title
-      listEl.appendChild(listItem)
+      new ProjectItem(this.element.querySelector('ul')!.id, prjItem)
     }
   }
 }
