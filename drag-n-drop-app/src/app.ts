@@ -62,9 +62,51 @@ class ProjectState extends State<Project> {
       ProjectStatus.Active
     )
     this.projects.push(newProject)
+    this.updateListeners()
+    this.saveToLocalStorage()
+  }
+
+  moveProject(projectId: string, newStatus: ProjectStatus) {
+    const project = this.projects.find((prj) => prj.id === projectId)
+    if (project && project.status !== newStatus) {
+      project.status = newStatus
+      this.updateListeners()
+      this.saveToLocalStorage()
+    }
+  }
+
+  private updateListeners() {
     for (const listenerFn of this.listeners) {
       listenerFn([...this.projects])
     }
+  }
+
+  private saveToLocalStorage() {
+    const stringifyProjects = JSON.stringify(this.projects)
+    localStorage.setItem('projects', stringifyProjects)
+  }
+
+  public loadFromLocalStorage() {
+    const loadedProjects = localStorage.getItem('projects')
+    if (!loadedProjects) return
+    const parsedProjects: {
+      id: string
+      title: string
+      description: string
+      people: number
+      status: ProjectStatus
+    }[] = JSON.parse(loadedProjects)
+    for (const prj of parsedProjects) {
+      const project = new Project(
+        prj.id,
+        prj.title,
+        prj.description,
+        prj.people,
+        prj.status
+      )
+      this.projects.push(project)
+    }
+    this.updateListeners()
   }
 }
 
@@ -239,8 +281,13 @@ class ProjectList
     }
   }
 
+  @autobind
   dropHandler(event: DragEvent) {
-    console.log(event.dataTransfer!.getData('text/plain'))
+    const prjId = event.dataTransfer!.getData('text/plain')
+    projectState.moveProject(
+      prjId,
+      this.type === 'active' ? ProjectStatus.Active : ProjectStatus.Finished
+    )
   }
 
   @autobind
@@ -365,3 +412,4 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
 const prjInput = new ProjectInput()
 const activePrjList = new ProjectList('active')
 const finishedPrjList = new ProjectList('finished')
+projectState.loadFromLocalStorage()
