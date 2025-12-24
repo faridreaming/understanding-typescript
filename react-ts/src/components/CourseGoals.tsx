@@ -8,10 +8,11 @@ type Goal = {
 
 interface CourseGoalsProps {
   goals: Goal[]
+  onDelete: (id: number) => void
 }
 
 // export default function CourseGoals({ goals }: CourseGoalsProps) {
-const CourseGoals: FC<CourseGoalsProps> = ({ goals }) => {
+const CourseGoals: FC<CourseGoalsProps> = ({ goals, onDelete }) => {
   return (
     <ul>
       {goals.map((goal) => (
@@ -21,7 +22,7 @@ const CourseGoals: FC<CourseGoalsProps> = ({ goals }) => {
               <h2>{goal.title}</h2>
               <p>{goal.description}</p>
             </div>
-            <button>Delete</button>
+            <button onClick={() => onDelete(goal.id)}>Delete</button>
           </article>
         </li>
       ))}
