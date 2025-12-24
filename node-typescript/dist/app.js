@@ -1,7 +1,10 @@
-import { createServer } from 'node:http';
-const server = createServer((req, res) => {
+import express from 'express';
+const app = express();
+app.get('/', (req, res) => {
     console.log(req.method);
-    res.end('Hello Bubub!');
+    res.json({
+        message: 'Halo Bubub Among Us!',
+    });
 });
-server.listen(3000);
+app.listen(3000);
 //# sourceMappingURL=app.js.map

@@ -1,8 +1,12 @@
-import { createServer } from 'node:http'
+import express from 'express'
 
-const server = createServer((req, res) => {
+const app = express()
+
+app.get('/', (req, res) => {
   console.log(req.method)
-  res.end('Hello Bubub!')
+  res.json({
+    message: 'Halo Bubub Among Us!',
+  })
 })
 
-server.listen(3000)
+app.listen(3000)
